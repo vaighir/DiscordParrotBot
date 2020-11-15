@@ -3,6 +3,8 @@
 import discord
 import os
 
+import mysql_helper
+
 BOT_TOKEN = os.environ['BOT_TOKEN']
 
 HELP_TEXT = """`!parrot read` to read messages on this channel
@@ -48,17 +50,18 @@ class MyClient(discord.Client):
         await message.channel.send(HELP_TEXT)
 
     async def read_channel(self, channel):
-        messages = await channel.history().flatten()
+        messages = await channel.history(limit=20000).flatten()
         for m in messages:
             if not m.author.bot:
                 if m.author not in users:
                     users.append(m.author)
                 if not m.content.startswith("!"):
                     print(str(m.author) + " wrote " + m.content)
+                    mysql_helper.write_message(str(m.author), m.content)
         print(users)
 
 
-client = MyClient()
+client = MyClient(max_messages=20000)
 client.run(BOT_TOKEN)
 
 
