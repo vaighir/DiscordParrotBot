@@ -20,10 +20,10 @@ def connect():
     return mydb, cursor
 
 
-def write_message(author, message):
+def write_message(author, message, channel, server):
     mydb, cursor = connect()
-    stmt = "INSERT INTO " + save_messages_to_table + " (author, message) values (%s, %s)"
-    cursor.execute(stmt, (author, message))
+    stmt = "INSERT INTO " + save_messages_to_table + " (author, message, channel, server) values (%s, %s, %s, %s)"
+    cursor.execute(stmt, (author, message, channel, server))
     mydb.commit()
     cursor.close()
     mydb.close()

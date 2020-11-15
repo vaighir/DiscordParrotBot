@@ -67,14 +67,15 @@ class MyClient(discord.Client):
             # Respond with random chatter to message "!parrot"
             if len(message_content) == 1:
                 await message.channel.send(pick_random_chatter())
+                print(message.channel.guild)
 
             elif message_content[1] == "help":
                 await message.channel.send(pick_random_chatter())
                 await self.show_help(message)
 
             elif message_content[1] == "read":
-                await self.read_channel(message.channel)
-                await message.channel.send("I've read messages from " + users_to_text())
+                count = await self.read_channel(message.channel)
+                await message.channel.send("I've read " + str(count) + " messages from " + users_to_text())
 
             elif message_content[1] == "learn":
                 if len(message_content) == 2:
@@ -95,17 +96,21 @@ class MyClient(discord.Client):
     # Read and save messages from a channel
     async def read_channel(self, channel):
         messages = await channel.history(limit=20000).flatten()
+        count = 0
         for m in messages:
             if not m.author.bot:
                 if m.author not in users:
                     users.append(m.author)
                 if not m.content.startswith("!"):
+                    count += 1
                     print(str(m.author) + " wrote " + m.content)
-                    mysql_helper.write_message(str(m.author), m.content)
+                    mysql_helper.write_message(str(m.author), m.content, channel.name, str(channel.guild))
         print(users)
+        return count
 
     async def learn(self, channel, user):
         await channel.send("Learning " + user)
+
 
 client = MyClient(max_messages=20000)
 client.run(BOT_TOKEN)
