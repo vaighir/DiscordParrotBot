@@ -15,6 +15,7 @@ RANDOM_PARROT_CHATTER = ["SQUAWK!!!", "Squawky wants a cookie!!!", "Squawky is a
 
 # Text displayed when users ask for help
 HELP_TEXT = """`!parrot read` to read messages on this channel
+`!parrot learn <username>#<discriminator> to analyse a user's messages
 %s"""
 
 channels = []
@@ -30,6 +31,18 @@ def users_to_text():
         users_as_text += str(u.name) + "#" + str(u.discriminator) + " "
 
     return users_as_text
+
+
+def is_a_known_user(username):
+    status = False
+
+    name, discriminator = username.split("#")
+
+    for u in users:
+        if name == u.name and discriminator == u.discriminator:
+            status = True
+
+    return status
 
 
 # Pick a random thing for the bot to say
@@ -63,6 +76,14 @@ class MyClient(discord.Client):
                 await self.read_channel(message.channel)
                 await message.channel.send("I've read messages from " + users_to_text())
 
+            elif message_content[1] == "learn":
+                if len(message_content) == 2:
+                    await message.channel.send("You need to specify a user! SQUAWK")
+                elif is_a_known_user(message_content[2]):
+                    await self.learn(message.channel, message_content[2])
+                else:
+                    await message.channel.send("I don't know this user! SQUAWK")
+
             else:
                 await message.channel.send("SQUAWK! I don't understand!")
                 await self.show_help(message)
@@ -83,6 +104,8 @@ class MyClient(discord.Client):
                     mysql_helper.write_message(str(m.author), m.content)
         print(users)
 
+    async def learn(self, channel, user):
+        await channel.send("Learning " + user)
 
 client = MyClient(max_messages=20000)
 client.run(BOT_TOKEN)
