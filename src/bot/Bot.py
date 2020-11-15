@@ -16,18 +16,30 @@ RANDOM_PARROT_CHATTER = ["SQUAWK!!!", "Squawky wants a cookie!!!", "Squawky is a
 # Text displayed when users ask for help
 HELP_TEXT = """- `!parrot read` to read messages on this channel
 - `!parrot learn <username>#<discriminator>` to analyse a user's messages
+- `!parrot stats` to see users whose messages have been read and analysed
 %s"""
 
 users = []
+analysed_users = []
 
 
 # Returns a nicely formatted string with all users whose messages have been read
-def users_to_text():
+def users_to_text(description="all"):
     users_as_text = ""
-    for u in users:
-        if users_as_text != "":
-            users_as_text += " and "
-        users_as_text += str(u.name) + "#" + str(u.discriminator) + " "
+
+    if description == "all":
+        for u in users:
+            if users_as_text != "":
+                users_as_text += " and "
+            users_as_text += str(u.name) + "#" + str(u.discriminator) + " "
+
+        if users_as_text == "":
+            users_as_text = "no-one"
+
+    elif description == "analysed":
+        users_as_text = ', '.join(analysed_users)
+        if len(analysed_users) == 0:
+            users_as_text = "no-one"
 
     return users_as_text
 
@@ -84,6 +96,11 @@ class MyClient(discord.Client):
                 else:
                     await message.channel.send("I don't know this user! SQUAWK")
 
+            elif message_content[1] == "stats":
+
+                await message.channel.send(
+                    "I've read messages from " + users_to_text() + ". I've analysed " + users_to_text("analysed"))
+
             else:
                 await message.channel.send("SQUAWK! I don't understand!")
                 await self.show_help(message)
@@ -114,6 +131,10 @@ class MyClient(discord.Client):
         return count
 
     async def learn(self, channel, user):
+
+        if user not in analysed_users:
+            analysed_users.append(user)
+
         await channel.send("Learning " + user)
 
 
