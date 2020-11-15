@@ -5,8 +5,7 @@ import os
 
 BOT_TOKEN = os.environ['BOT_TOKEN']
 
-HELP_TEXT = """SQUAWK!
-`!parrot read` to read messages on this channel
+HELP_TEXT = """`!parrot read` to read messages on this channel
 Squawky wants a cookie!!!"""
 
 channels = []
@@ -36,6 +35,7 @@ class MyClient(discord.Client):
             if len(message_content) == 1:
                 await message.channel.send("SQUAWK")
             elif message_content[1] == "help":
+                await message.channel.send("SQUAWK!")
                 await self.show_help(message)
             elif message_content[1] == "read":
                 await self.read_channel(message.channel)
