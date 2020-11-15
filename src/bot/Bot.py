@@ -14,11 +14,10 @@ RANDOM_PARROT_CHATTER = ["SQUAWK!!!", "Squawky wants a cookie!!!", "Squawky is a
                          "I'm Squawky!", "I'm a star"]
 
 # Text displayed when users ask for help
-HELP_TEXT = """`!parrot read` to read messages on this channel
-`!parrot learn <username>#<discriminator> to analyse a user's messages
+HELP_TEXT = """- `!parrot read` to read messages on this channel
+- `!parrot learn <username>#<discriminator>` to analyse a user's messages
 %s"""
 
-channels = []
 users = []
 
 
@@ -67,10 +66,10 @@ class MyClient(discord.Client):
             # Respond with random chatter to message "!parrot"
             if len(message_content) == 1:
                 await message.channel.send(pick_random_chatter())
-                print(message.channel.guild)
+                guild = message.channel.guild
+                print(guild.text_channels)
 
             elif message_content[1] == "help":
-                await message.channel.send(pick_random_chatter())
                 await self.show_help(message)
 
             elif message_content[1] == "read":
@@ -95,17 +94,23 @@ class MyClient(discord.Client):
 
     # Read and save messages from a channel
     async def read_channel(self, channel):
-        messages = await channel.history(limit=20000).flatten()
         count = 0
-        for m in messages:
-            if not m.author.bot:
-                if m.author not in users:
-                    users.append(m.author)
-                if not m.content.startswith("!"):
-                    count += 1
-                    print(str(m.author) + " wrote " + m.content)
-                    mysql_helper.write_message(str(m.author), m.content, channel.name, str(channel.guild))
-        print(users)
+        server = channel.guild
+        all_channels = server.text_channels
+
+        mysql_helper.delete_messages_from_server(server.name)
+
+        for ch in all_channels:
+            messages = await ch.history(limit=20000).flatten()
+            for m in messages:
+                if not m.author.bot:
+                    if m.author not in users:
+                        users.append(m.author)
+                    if not m.content.startswith("!"):
+                        count += 1
+                        print(str(m.author) + " wrote " + m.content)
+                        mysql_helper.write_message(str(m.author), m.content, channel.name, str(channel.guild))
+            print(users)
         return count
 
     async def learn(self, channel, user):

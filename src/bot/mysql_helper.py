@@ -27,3 +27,12 @@ def write_message(author, message, channel, server):
     mydb.commit()
     cursor.close()
     mydb.close()
+
+
+def delete_messages_from_server(server):
+    mydb, cursor = connect()
+    stmt = "DELETE FROM " + save_messages_to_table + " WHERE server = %s"
+    cursor.execute(stmt, (server,))
+    mydb.commit()
+    cursor.close()
+    mydb.close()
