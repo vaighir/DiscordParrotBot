@@ -112,6 +112,7 @@ class MyClient(discord.Client):
 
     # Read and save messages from a channel
     async def read_channel(self, channel):
+        await channel.send("Starting to read")
         count = 0
         server = channel.guild
         all_channels = server.text_channels
@@ -124,7 +125,7 @@ class MyClient(discord.Client):
                 if not m.author.bot:
                     if m.author not in users:
                         users.append(m.author)
-                    if not m.content.startswith("!"):
+                    if not m.content.startswith("!") and not m.content.startswith("$"):
                         count += 1
                         print(str(m.author) + " wrote " + m.content)
                         mysql_helper.write_message(str(m.author), m.content, channel.name, str(channel.guild))
