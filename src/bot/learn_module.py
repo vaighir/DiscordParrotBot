@@ -43,4 +43,7 @@ def main(author, server):
         for y in dictionary[x]:
             print(y, ":", dictionary[x][y])
 
+    key = author + "_" + server
+    result = {key: {"dictionary": dictionary, "first_words": first_words}}
+
     # TODO save new dictionary into the database
