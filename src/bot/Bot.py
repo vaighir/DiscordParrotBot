@@ -5,6 +5,7 @@ import os
 import random
 
 import mysql_helper
+import learn_module
 
 BOT_TOKEN = os.environ['BOT_TOKEN']
 
@@ -136,6 +137,12 @@ class MyClient(discord.Client):
             analysed_users.append(user)
 
         await channel.send("Learning " + user)
+
+        server = channel.guild.name
+
+        learn_module.main(user, server)
+
+        await channel.send(user + " analysed")
 
 
 client = MyClient(max_messages=20000)

@@ -29,6 +29,16 @@ def write_message(author, message, channel, server):
     mydb.close()
 
 
+def load_messages(author, server):
+    mydb, cursor = connect()
+    stmt = "SELECT message FROM " + save_messages_to_table + " WHERE author = %s and server = %s"
+    cursor.execute(stmt, (author, server))
+    posts = cursor.fetchall()
+    cursor.close()
+    mydb.close()
+    return posts
+
+
 def delete_messages_from_server(server):
     mydb, cursor = connect()
     stmt = "DELETE FROM " + save_messages_to_table + " WHERE server = %s"
