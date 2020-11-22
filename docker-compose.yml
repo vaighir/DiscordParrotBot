@@ -1,0 +1,23 @@
+version: "3.8"
+
+x-bot: &bot
+  BOT_TOKEN: $BOT_TOKEN
+
+x-mysql: &mysql
+  MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+  MYSQL_PASSWORD: $MYSQL_PASSWORD
+  MYSQL_HOSTNAME: $MYSQL_HOSTNAME
+  MYSQL_PORT: $MYSQL_PORT
+  MYSQL_DATABASE: $MYSQL_DB
+  REAL_MESSAGES_TABLE: $REAL_MESSAGES_TABLE
+  MYSQL_USER: $MYSQL_USER
+
+services:
+  bot:
+    build: ./src/bot/.
+    restart: always
+    environment:
+      <<: *bot
+      <<: *mysql
+    volumes:
+      - ./src/bot/code:/app

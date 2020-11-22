@@ -7,7 +7,7 @@ username = os.environ['MYSQL_USER']
 password = os.environ['MYSQL_PASSWORD']
 hostname = os.environ['MYSQL_HOSTNAME']
 db_port = os.environ['MYSQL_PORT']
-db = os.environ['MYSQL_DB']
+db = os.environ['MYSQL_DATABASE']
 real_messages_table = os.environ['REAL_MESSAGES_TABLE']
 
 
