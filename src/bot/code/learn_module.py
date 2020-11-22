@@ -14,18 +14,18 @@ def learn(dictionary, first_words, message):
     for i in range(0, len(tokens)-1):
         current = tokens[i]
 
-        next = tokens[i+1]
+        next_w = tokens[i + 1]
 
         if current in dictionary:
-            nextWords = dictionary[current]
+            next_words = dictionary[current]
 
-            if next in nextWords:
-                dictionary[current][next] = dictionary[current][next] + 1
+            if next_w in next_words:
+                dictionary[current][next_w] = dictionary[current][next_w] + 1
             else:
-                dictionary[current][next] = 1
+                dictionary[current][next_w] = 1
 
         else:
-            dictionary[current] = {next: 1}
+            dictionary[current] = {next_w: 1}
 
 
 def main(author, server):

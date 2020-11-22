@@ -3,18 +3,18 @@
 import os
 import mysql.connector
 
-username = os.environ['USER']
-password = os.environ['PASSWORD']
-hostname = os.environ['HOSTNAME']
-dbport = os.environ['DBPORT']
-db = os.environ['DB']
-save_messages_to_table = os.environ['REAL_MESSAGES_TABLE']
+username = os.environ['MYSQL_USER']
+password = os.environ['MYSQL_PASSWORD']
+hostname = os.environ['MYSQL_HOSTNAME']
+db_port = os.environ['MYSQL_PORT']
+db = os.environ['MYSQL_DB']
+real_messages_table = os.environ['REAL_MESSAGES_TABLE']
 
 
 def connect():
     """"Connect to database using data from environment variables"""
     mydb = mysql.connector.connect(
-        host=hostname, user=username, passwd=password, port=dbport,
+        host=hostname, user=username, passwd=password, port=db_port,
         database=db, auth_plugin='caching_sha2_password')
     cursor = mydb.cursor(prepared=True)
     return mydb, cursor
@@ -22,7 +22,7 @@ def connect():
 
 def write_message(author, message, channel, server):
     mydb, cursor = connect()
-    stmt = "INSERT INTO " + save_messages_to_table + " (author, message, channel, server) values (%s, %s, %s, %s)"
+    stmt = "INSERT INTO " + real_messages_table + " (author, message, channel, server) values (%s, %s, %s, %s)"
     cursor.execute(stmt, (author, message, channel, server))
     mydb.commit()
     cursor.close()
@@ -31,7 +31,7 @@ def write_message(author, message, channel, server):
 
 def load_messages(author, server):
     mydb, cursor = connect()
-    stmt = "SELECT message FROM " + save_messages_to_table + " WHERE author = %s and server = %s"
+    stmt = "SELECT message FROM " + real_messages_table + " WHERE author = %s and server = %s"
     cursor.execute(stmt, (author, server))
     posts = cursor.fetchall()
     cursor.close()
@@ -41,7 +41,7 @@ def load_messages(author, server):
 
 def delete_messages_from_server(server):
     mydb, cursor = connect()
-    stmt = "DELETE FROM " + save_messages_to_table + " WHERE server = %s"
+    stmt = "DELETE FROM " + real_messages_table + " WHERE server = %s"
     cursor.execute(stmt, (server,))
     mydb.commit()
     cursor.close()
