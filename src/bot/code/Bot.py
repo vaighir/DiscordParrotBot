@@ -20,6 +20,8 @@ HELP_TEXT = """- `!parrot read` to read messages on this channel
 - `!parrot stats` to see users whose messages have been read and analysed
 %s"""
 
+MAX_MESSAGES = 20000
+
 users = []
 analysed_users = []
 
@@ -146,7 +148,7 @@ class MyClient(discord.Client):
         await channel.send(user + " analysed")
 
 
-client = MyClient(max_messages=20000)
+client = MyClient(max_messages=MAX_MESSAGES)
 client.run(BOT_TOKEN)
 
 
