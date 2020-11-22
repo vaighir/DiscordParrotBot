@@ -21,3 +21,17 @@ services:
       <<: *mysql
     volumes:
       - ./src/bot/code:/app
+
+  mysql:
+    image: mysql:8.0.22
+    restart: always
+    environment:
+      <<: *mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./src/mysql:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
