@@ -8,7 +8,7 @@ x-mysql: &mysql
   MYSQL_PASSWORD: $MYSQL_PASSWORD
   MYSQL_HOSTNAME: $MYSQL_HOSTNAME
   MYSQL_PORT: $MYSQL_PORT
-  MYSQL_DATABASE: $MYSQL_DB
+  MYSQL_DATABASE: $MYSQL_DATABASE
   REAL_MESSAGES_TABLE: $REAL_MESSAGES_TABLE
   MYSQL_USER: $MYSQL_USER
 
@@ -47,7 +47,7 @@ services:
     ports:
       - '27017-27019:27017-27019'
     volumes:
-      - ./src/mongo:/docker-entrypoint-initdb.d
+      - ./src/mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
       - mongo_data:/data/db
 
 volumes:

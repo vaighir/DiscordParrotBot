@@ -1,11 +1,11 @@
-db.createUser(
+db.CreateUser(
     {
-        user: System.getenv("MONGO_USER"),
-        pwd: System.getenv("MONGO_PASSWORD"),
-        roles: [
+        user    : process.env.MONGO_INITDB_ROOT_USERNAME,
+        pwd     : process.env.MONGO_INITDB_ROOT_PASSWORD,
+        roles   : [
             {
-                role: "readWrite",
-                db: System.getenv("MONGO_DATABASE")
+                role    : "readWrite",
+                db      : process.env.MONGO_INITDB_DATABASE
             }
         ]
     }
