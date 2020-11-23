@@ -3,6 +3,7 @@ import os
 import json
 
 import mysql_helper
+import mongo_helper
 
 
 def learn(dictionary, first_words, message):
@@ -29,7 +30,6 @@ def learn(dictionary, first_words, message):
 
 
 def main(author, server):
-    # TODO delete old dictionary from the database
     dictionary = dict()
     first_words = []
     messages = mysql_helper.load_messages(author, server)
@@ -44,6 +44,8 @@ def main(author, server):
             print(y, ":", dictionary[x][y])
 
     key = author + "_" + server
-    result = {key: {"dictionary": dictionary, "first_words": first_words}}
+    result = {"key": key,
+              "content": {"dictionary": dictionary, "first_words": first_words}}
 
-    # TODO save new dictionary into the database
+    mongo_helper.write_dictionary_to_mongodb(result)
+
