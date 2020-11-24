@@ -6,6 +6,7 @@ import random
 
 import mysql_helper
 import learn_module
+import generate_message
 
 BOT_TOKEN = os.environ['BOT_TOKEN']
 
@@ -17,6 +18,7 @@ RANDOM_PARROT_CHATTER = ["SQUAWK!!!", "Squawky wants a cookie!!!", "Squawky is a
 # Text displayed when users ask for help
 HELP_TEXT = """- `!parrot read` to read messages on this channel
 - `!parrot learn <username>#<discriminator>` to analyse a user's messages
+- `!parrot generate <username>#<discriminator>` to generate a user's messages
 - `!parrot stats` to see users whose messages have been read and analysed
 %s"""
 
@@ -99,6 +101,14 @@ class MyClient(discord.Client):
                 else:
                     await message.channel.send("I don't know this user! SQUAWK")
 
+            elif message_content[1] == "generate":
+                if len(message_content) == 2:
+                    await message.channel.send("You need to specify a user! SQUAWK")
+                elif is_a_known_user(message_content[2]):
+                    await self.generate(message.channel, message_content[2])
+                else:
+                    await message.channel.send("I don't know this user! SQUAWK")
+
             elif message_content[1] == "stats":
 
                 await message.channel.send(
@@ -146,6 +156,14 @@ class MyClient(discord.Client):
         learn_module.main(user, server)
 
         await channel.send(user + " analysed")
+
+    async def generate(self, channel, user):
+
+        server = channel.guild.name
+
+        new_message = generate_message.main(user, server)
+
+        #await channel.send(new_message)
 
 
 client = MyClient(max_messages=MAX_MESSAGES)
