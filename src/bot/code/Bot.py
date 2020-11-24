@@ -124,7 +124,7 @@ class MyClient(discord.Client):
 
     # Read and save messages from a channel
     async def read_channel(self, channel):
-        await channel.send("Starting to read")
+        await channel.send("Starting to read. It might take a while. I'm just a parrot. Squawk!")
         count = 0
         server = channel.guild
         all_channels = server.text_channels
@@ -163,7 +163,7 @@ class MyClient(discord.Client):
 
         new_message = generate_message.main(user, server)
 
-        #await channel.send(new_message)
+        await channel.send(new_message)
 
 
 client = MyClient(max_messages=MAX_MESSAGES)
