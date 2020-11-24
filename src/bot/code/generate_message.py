@@ -32,6 +32,8 @@ def get_next_word(last_word, first_word, dictionary):
 
 
 def generate(dictionary, first_word):
+
+    # TODO mark ending of messages in learning module and use it to terminate the message instead of random length
     length = random.randint(1, 10)
 
     if len(dictionary) < 1:
@@ -63,4 +65,4 @@ def main(author, server):
 
     print(message)
 
-    return message
+    return "%s said: %s" % (author, message)
