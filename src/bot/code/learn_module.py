@@ -38,14 +38,12 @@ def main(author, server):
         for m in message:
             learn(dictionary, first_words, m)
 
-    for x in dictionary:
-        print(x)
-        for y in dictionary[x]:
-            print(y, ":", dictionary[x][y])
-
     key = author + "_" + server
     result = {"key": key,
               "content": {"dictionary": dictionary, "first_words": first_words}}
 
-    mongo_helper.write_dictionary_to_mongodb(result)
+    # TODO fix mongodb authorization and save result to the database
+    #mongo_helper.write_dictionary_to_mongodb(result)
+
+    return result
 
