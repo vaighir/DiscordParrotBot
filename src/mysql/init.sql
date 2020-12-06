@@ -11,3 +11,10 @@ CREATE TABLE real_message (
     channel VARCHAR(255),
     PRIMARY KEY (id)
 );
+
+CREATE TABLE dictionary (
+    id INT AUTO_INCREMENT,
+    author VARCHAR(255),
+    dictionary JSON,
+    PRIMARY KEY (id)
+);
