@@ -3,7 +3,6 @@ import os
 import json
 
 import mysql_helper
-import mongo_helper
 
 
 def learn(dictionary, first_words, message):

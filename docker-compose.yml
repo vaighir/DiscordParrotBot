@@ -12,11 +12,6 @@ x-mysql: &mysql
   REAL_MESSAGES_TABLE: $REAL_MESSAGES_TABLE
   MYSQL_USER: $MYSQL_USER
 
-x-mongo: &mongo
-  MONGO_INIT_DATABASE: $MONGO_INIT_DATABASE
-  MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
-  MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
-
 services:
   bot:
     build: ./src/bot/.
@@ -24,7 +19,6 @@ services:
     environment:
       <<: *bot
       <<: *mysql
-      <<: *mongo
     volumes:
       - ./src/bot/code:/app
 
@@ -39,17 +33,5 @@ services:
       - ./src/mysql:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
 
-  mongo:
-    image: mongo:4.4.2-bionic
-    restart: always
-    environment:
-      <<: *mongo
-    ports:
-      - '27017-27019:27017-27019'
-    volumes:
-      - ./src/mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-      - mongo_data:/data/db
-
 volumes:
   mysql_data:
-  mongo_data:

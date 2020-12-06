@@ -3,7 +3,6 @@ import os
 import json
 import random
 
-import mongo_helper
 import learn_module
 
 
