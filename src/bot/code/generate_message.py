@@ -4,6 +4,7 @@ import json
 import random
 
 import learn_module
+import mysql_helper
 
 
 def pick_random(words_list):
@@ -51,16 +52,20 @@ def generate(dictionary, first_word):
 
 def main(author, server):
 
-    # TODO get the learn result from mongodb
-    # key = author + "_" + server
+    message = ""
 
-    learn_result = learn_module.main(author, server)
+    key = author + "_" + server
+    learn_result_as_tuple = mysql_helper.load_dictionary(key)[0]
+    for lr in learn_result_as_tuple:
+        learn_result = json.loads(lr)
+        print(type(learn_result))
+        print(learn_result)
 
-    dictionary = learn_result['content']['dictionary']
-    first_words = learn_result['content']['first_words']
+        dictionary = learn_result['content']['dictionary']
+        first_words = learn_result['content']['first_words']
 
-    beginning = pick_random(first_words)
-    message = generate(dictionary, beginning)
+        beginning = pick_random(first_words)
+        message = generate(dictionary, beginning)
 
     print(message)
 

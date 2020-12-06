@@ -41,8 +41,4 @@ def main(author, server):
     result = {"key": key,
               "content": {"dictionary": dictionary, "first_words": first_words}}
 
-    # TODO fix mongodb authorization and save result to the database
-    #mongo_helper.write_dictionary_to_mongodb(result)
-
-    return result
-
+    mysql_helper.write_dictionary(key, json.dumps(result))
