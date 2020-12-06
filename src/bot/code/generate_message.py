@@ -6,6 +6,9 @@ import random
 import learn_module
 import mysql_helper
 
+end_of_message = "~~~~END~~~~~!"
+max_message_length = 25
+
 
 def pick_random(words_list):
     rand = random.randint(0, len(words_list)-1)
@@ -33,17 +36,16 @@ def get_next_word(last_word, first_word, dictionary):
 
 def generate(dictionary, first_word):
 
-    # TODO mark ending of messages in learning module and use it to terminate the message instead of random length
-    length = random.randint(1, 10)
-
     if len(dictionary) < 1:
         return ""
 
     last_word = "!parrot"
     result = ""
-    for i in range(0, length):
+    for i in range(0, max_message_length):
 
         new_word = get_next_word(last_word, first_word, dictionary)
+        if new_word == end_of_message:
+            break
         result = result + " " + new_word
         last_word = new_word
 
